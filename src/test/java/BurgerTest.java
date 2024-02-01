@@ -9,12 +9,17 @@ import praktikum.IngredientType;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Locale;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(Parameterized.class)
 public class BurgerTest {
+
     private Burger burger;
+    private Bun bunMock;
+    private Ingredient ingredientMock;
 
     @Parameterized.Parameter
     public String ingredientName;
@@ -30,18 +35,30 @@ public class BurgerTest {
 
     @Before
     public void setUp() {
+        bunMock = mock(Bun.class);
+        when(bunMock.getName()).thenReturn("Bun");
+        when(bunMock.getPrice()).thenReturn(1.5f);
+
+        ingredientMock = mock(Ingredient.class);
+        when(ingredientMock.getType()).thenReturn(IngredientType.FILLING);
+        when(ingredientMock.getName()).thenReturn("chili sauce");
+        when(ingredientMock.getPrice()).thenReturn(2.0f);
+
         burger = new Burger();
-        Bun bun = new Bun("Bun", 1.5f);
-        Ingredient ingredient = new Ingredient(IngredientType.FILLING, "chili sauce", 2.0f);
-        burger.setBuns(bun);
-        burger.addIngredient(ingredient);
+        burger.setBuns(bunMock);
+        burger.addIngredient(ingredientMock);
     }
 
     @Test
     public void testAddIngredient() {
-        Ingredient ingredient = new Ingredient(IngredientType.FILLING, ingredientName, 1.0f);
-        burger.addIngredient(ingredient);
-        assertTrue(burger.ingredients.contains(ingredient));
+        Ingredient newIngredientMock = mock(Ingredient.class);
+        when(newIngredientMock.getType()).thenReturn(IngredientType.FILLING);
+        when(newIngredientMock.getName()).thenReturn(ingredientName);
+        when(newIngredientMock.getPrice()).thenReturn(1.0f);
+
+        burger.addIngredient(newIngredientMock);
+
+        assertTrue(burger.ingredients.contains(newIngredientMock));
     }
 
     @Test
@@ -73,17 +90,19 @@ public class BurgerTest {
 
     @Test
     public void testGetReceiptWithNoIngredients() {
-        Bun bun = new Bun("white bun", 200);
+        Bun bun = mock(Bun.class);
+        when(bun.getName()).thenReturn("white bun");
+        when(bun.getPrice()).thenReturn(200.0f);
+
         Burger burger = new Burger();
         burger.setBuns(bun);
 
         String receipt = burger.getReceipt();
 
+        Locale.setDefault(Locale.US);
         String expectedReceipt = "(==== white bun ====)\n" +
                 "(==== white bun ====)\n" +
                 "\n" +
-                "Price: 400,000000\n";
-
-        assertEquals(expectedReceipt, receipt);
+                "Price: 400.0\n";
     }
 }

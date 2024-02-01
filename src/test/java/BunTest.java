@@ -1,13 +1,12 @@
 import praktikum.Bun;
 
-import static org.mockito.Mockito.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Collection;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.fail;
 
 @RunWith(Parameterized.class)
 public class BunTest {
@@ -31,47 +30,28 @@ public class BunTest {
 
     @Test
     public void testBunConstructor() {
-        Bun bunMock = mock(Bun.class);
-        when(bunMock.getName()).thenReturn(bunName);
-        when(bunMock.getPrice()).thenReturn(bunPrice);
+        Bun bun = new Bun(bunName, bunPrice);
 
-        assertEquals(bunName, bunMock.getName());
-        assertEquals(bunPrice, bunMock.getPrice(), 0.001);
+        assertEquals(bunName, bun.getName());
+        assertEquals(bunPrice, bun.getPrice(), 0.001);
     }
 
     @Test
     public void testGetName() {
-        Bun bunMock = mock(Bun.class);
-        when(bunMock.getName()).thenReturn(bunName);
-
-        assertEquals(bunName, bunMock.getName());
+        Bun bun = new Bun(bunName, bunPrice);
+        assertEquals(bunName, bun.getName());
     }
 
     @Test
     public void testGetPrice() {
-        Bun bunMock = mock(Bun.class);
-        when(bunMock.getPrice()).thenReturn(bunPrice);
-
-        assertEquals(bunPrice, bunMock.getPrice(), 0.001);
+        Bun bun = new Bun(bunName, bunPrice);
+        assertEquals(bunPrice, bun.getPrice(), 0.001);
     }
 
     @Test
     public void testBunWithZeroPrice() {
-        Bun bunMock = mock(Bun.class);
-        when(bunMock.getName()).thenReturn(bunName);
-        when(bunMock.getPrice()).thenReturn(bunPrice);
-
-        assertEquals(bunName, bunMock.getName());
-        assertEquals(bunPrice, bunMock.getPrice(), 0.001);
-    }
-
-    @Test
-    public void testBunWithNegativePrice() {
-        Bun bunMock = mock(Bun.class);
-        when(bunMock.getName()).thenReturn(bunName);
-        when(bunMock.getPrice()).thenThrow(new IllegalArgumentException("Ошибка! Цена не может быть отрицательной"));
-
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, bunMock::getPrice);
-        assertEquals("Ошибка! Цена не может быть отрицательной", exception.getMessage());
+        Bun bun = new Bun(bunName, 0.0f);
+        assertEquals(bunName, bun.getName());
+        assertEquals(0.0f, bun.getPrice(), 0.001);
     }
 }
